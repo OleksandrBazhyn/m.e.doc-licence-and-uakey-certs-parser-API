@@ -1,4 +1,4 @@
-const { Builder, Browser, By, until } = require("selenium-webdriver");
+const { Builder, Browser, By, until, Key } = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
 const Debuger = require("./Debuger");
 
@@ -52,17 +52,47 @@ class UakeyParser {
             `);
             await this.driver.sleep(500); // Wait a bit to ensure UI updates
     
-            await debuger.takeScreenshot("modal_opened.png", debugMode);
-            await debuger.getPageSource("page_source_after_modal.html", debugMode);
+            let inputField = await this.driver.wait(
+                until.elementLocated(By.css('.search-signature')),
+                5000
+            );
     
+            // Click on input field to focus
+            await inputField.click();
+    
+            // Clear the input field
+            await inputField.clear();
+    
+            // Send USREOU as keystrokes
+            await inputField.sendKeys(USREOU, Key.RETURN);
+    
+            // Wait for the results to load
+            await this.driver.wait(until.elementLocated(By.css(".search-results")), 5000);
+            
+            // Extracting data from the search results
+            let results = await this.driver.findElements(By.css(".search-results .result-item"));
+            let parsedResults = [];
+            
+            for (let result of results) {
+                let name = await result.findElement(By.css(".company-name")).getText();
+                let code = await result.findElement(By.css(".company-code")).getText();
+                let address = await result.findElement(By.css(".company-address")).getText();
+                
+                parsedResults.push({ name, code, address });
+            }
+            
+            if (debugMode) console.log("Parsed Results:", parsedResults);
+            
+            return parsedResults;
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             if (debuger) {
                 await debuger.takeScreenshot("error.png", debugMode);
                 await debuger.getPageSource("error_page_source.html", debugMode);
             }
+            return null;
         }
-    }    
+    }  
 }
 
 // Testing script
@@ -71,7 +101,7 @@ class UakeyParser {
     try {
         let debugMode = true;
         await parser.init(debugMode);
-        await parser.getFullInfo(111, debugMode);
+        await parser.getFullInfo(27272727, debugMode);
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {
