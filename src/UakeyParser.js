@@ -1,34 +1,52 @@
-const { Builder, Browser } = require("selenium-webdriver");
+const { Builder, Browser, By, until } = require("selenium-webdriver");
 
 class UakeyParser {
-    static driver = null;
+    constructor() {
+        this.driver = null;
+    }
 
-    static async init() {
-        if (!UakeyParser.driver) {
-            UakeyParser.driver = await new Builder().forBrowser(Browser.CHROME).build();
+    async init() {
+        if (!this.driver) {
+            this.driver = await new Builder().forBrowser(Browser.CHROME).build();
         }
     }
 
-    static async dispose() {
-        console.log("UakeyParser disposed");
-        if (UakeyParser.driver) {
-            await UakeyParser.driver.quit();
-            UakeyParser.driver = null;
+    async dispose() {
+        console.log("UakeyParser disposed.");
+        if (this.driver) {
+            await this.driver.quit();
+            this.driver = null;
+        }
+    }
+
+    async getFullInfo(USREOU) {
+        try {
+            await this.init();
+
+            await this.driver.get("https://uakey.com.ua/");
+            console.log("UakeyParser: Page loaded successfully!");
+
+            let button = await this.driver.wait(
+                until.elementLocated(By.css('a[data-toggle="modal"][data-target="#searchEcp"]')),
+                1000
+            );
+            
+            await button.click();
+            console.log("Button was clicked!");
+        } catch (err) {
+            console.error(err);
         }
     }
 }
 
-// Developing test
+// Використання
 (async () => {
+    const parser = new UakeyParser();
     try {
-        await UakeyParser.init();
-
-        await UakeyParser.driver.get("https://simbad.u-strasbg.fr/simbad/sim-basic?submit=SIMBAD+search&Ident=TIC+103509957");
-
-        console.log("Page loaded successfully!");
+        await parser.getFullInfo(111);
     } catch (err) {
         console.error(err);
     } finally {
-        await UakeyParser.dispose();
+        await parser.dispose();
     }
 })();
