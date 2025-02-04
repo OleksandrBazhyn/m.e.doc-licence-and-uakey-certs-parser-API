@@ -31,51 +31,38 @@ class UakeyParser {
     }
 
     async getFullInfo(USREOU, debugMode = false) {
-        let debuger = new Debuger(this.driver);
-
+        let debuger;
         try {
             if (!this.driver) throw new Error("Driver not initialized");
-
+            debuger = new Debuger(this.driver);
+    
             if (debugMode) console.log("UakeyParser: Navigating to https://uakey.com.ua/");
             await this.driver.get("https://uakey.com.ua/");
-            await this.driver.wait(until.elementLocated(By.css("body")), 3000);
+            await this.driver.wait(until.elementLocated(By.css("body")), 1000);
             if (debugMode) console.log("UakeyParser: Page loaded!");
-
-            // Handle burger menu if it exists
-            try {
-                let burgerMenu = await this.driver.findElements(By.css(".hamburger.js-hamburger"));
-                if (burgerMenu.length > 0) {
-                    let isActive = await burgerMenu[0].getAttribute("class");
-                    if (!isActive.includes("is-active")) {
-                        if (debugMode) console.log("UakeyParser: Expanding burger menu...");
-                        await this.driver.executeScript("arguments[0].click();", burgerMenu[0]);
-                        await this.driver.sleep(500);
-                    }
+    
+            // Open modal window directly by modifying its attributes
+            if (debugMode) console.log("UakeyParser: Opening search modal manually...");
+            await this.driver.executeScript(`
+                let modal = document.getElementById("searchEcp");
+                if (modal) {
+                    modal.classList.add("in");
+                    modal.style.display = "block";
                 }
-            } catch (error) {
-                if (debugMode) console.log("UakeyParser: No burger menu found or clickable.");
-            }
-
-            // Handle search button click
-            try {
-                let button = await this.waitForElement('a[data-toggle="modal"][data-target="#searchEcp"]');
-                await this.driver.wait(until.elementIsVisible(button), 3000);
-                if (debugMode) console.log("UakeyParser: Clicking search button...");
-                await this.driver.executeScript("arguments[0].click();", button);
-                if (debugMode) console.log("UakeyParser: Button clicked!");
-            } catch (error) {
-                throw new Error("Failed to find or click search button.");
-            }
-
-            await debuger.takeScreenshot("button_clicked.png", debugMode);
-            await debuger.getPageSource("page_source_after.html", debugMode);
-
+            `);
+            await this.driver.sleep(500); // Wait a bit to ensure UI updates
+    
+            await debuger.takeScreenshot("modal_opened.png", debugMode);
+            await debuger.getPageSource("page_source_after_modal.html", debugMode);
+    
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
-            await debuger.takeScreenshot("error.png", debugMode);
-            await debuger.getPageSource("error_page_source.html", debugMode);
+            if (debuger) {
+                await debuger.takeScreenshot("error.png", debugMode);
+                await debuger.getPageSource("error_page_source.html", debugMode);
+            }
         }
-    }
+    }    
 }
 
 // Testing script
