@@ -87,8 +87,13 @@ class UakeyParser {
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             if (debuger) {
-                await debuger.takeScreenshot("error.png", debugMode);
-                await debuger.getPageSource("error_page_source.html", debugMode);
+                const getFormattedDate = () => {
+                    const now = new Date();
+                    return now.toISOString().replace(/[:.]/g, '-'); // Забираємо проблемні символи
+                };
+                
+                await debuger.takeScreenshot(`error-${getFormattedDate()}.png`, debugMode);
+                await debuger.getPageSource(`error_page_source-${getFormattedDate()}.html`, debugMode);                
             }
             return null;
         }
