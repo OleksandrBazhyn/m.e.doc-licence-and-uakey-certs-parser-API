@@ -2,6 +2,10 @@
 This is a parser of information about the expiration date of the M.E.Doc software license and the expiration date of the electronic signature from the Key Certification Center "Ukraine".
 
 This repository is the server side of the project. It sends a response to the client in JSON format.
+
+Search on:
+https://medoc.ua/
+https://uakey.com.ua/
 ## Build
 Clone repository and install dependencies:
 ```bash
