@@ -4,8 +4,8 @@ This is a parser of information about the expiration date of the M.E.Doc softwar
 This repository is the server side of the project. It sends a response to the client in JSON format.
 
 Search on:
-https://medoc.ua/
-https://uakey.com.ua/
+- https://medoc.ua/
+- https://uakey.com.ua/
 ## Build
 Clone repository and install dependencies:
 ```bash
