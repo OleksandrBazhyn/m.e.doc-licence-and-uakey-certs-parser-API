@@ -1,0 +1,13 @@
+{
+  "name": "m.e.doc-licence-and-uakey-qes-tracker-api",
+  "version": "1.0.0",
+  "description": "Parse information from uakey.com.ua and medoc.ua to represent it on a website.",
+  "license": "ISC",
+  "author": "Oleksandr Bazhyn",
+  "type": "commonjs",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
