@@ -15,4 +15,4 @@ To run the project, execute the following command:
 ```bash
 npm run start
 ```
-## Features & Uses - Everything is real-time
+## Features & Uses
