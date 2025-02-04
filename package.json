@@ -9,5 +9,8 @@
   "scripts": {
     "start": "node src/app",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.28.1"
   }
 }
