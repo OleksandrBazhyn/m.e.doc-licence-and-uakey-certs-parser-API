@@ -4,7 +4,7 @@ const path = require("path");
 class Debuger {
     constructor(driver) {
         this.driver = driver;
-        this.debugDir = "./debug/";
+        this.debugDir = path.join(process.cwd(), "./debug/");
 
         if (!fs.existsSync(this.debugDir)) {
             fs.mkdirSync(this.debugDir, { recursive: true });

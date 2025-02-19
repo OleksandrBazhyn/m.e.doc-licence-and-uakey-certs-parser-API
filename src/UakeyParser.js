@@ -67,23 +67,26 @@ class UakeyParser {
             await inputField.sendKeys(USREOU, Key.RETURN);
     
             // Wait for the results to load
-            await this.driver.wait(until.elementLocated(By.css(".search-results")), 5000);
+            await this.driver.sleep(2000);                    
             
             // Extracting data from the search results
-            let results = await this.driver.findElements(By.css(".search-results .result-item"));
-            let parsedResults = [];
-            
-            for (let result of results) {
-                let name = await result.findElement(By.css(".company-name")).getText();
-                let code = await result.findElement(By.css(".company-code")).getText();
-                let address = await result.findElement(By.css(".company-address")).getText();
-                
-                parsedResults.push({ name, code, address });
+            let rows = [];
+            try {
+                rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
+            } catch (error) {
+                console.warn("The elements have not yet appeared:", error);
             }
+
+            if (rows.length > 0) {
+                console.log("Items found!");
+            } else {
+                console.log("No results.");
+            }
+
             
-            if (debugMode) console.log("Parsed Results:", parsedResults);
+            // if (debugMode) console.log("Parsed Results:", parsedResults);
             
-            return parsedResults;
+            // return parsedResults;
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             if (debuger) {
@@ -100,16 +103,4 @@ class UakeyParser {
     }  
 }
 
-// Testing script
-(async () => {
-    let parser = new UakeyParser();
-    try {
-        let debugMode = true;
-        await parser.init(debugMode);
-        await parser.getFullInfo(27272727, debugMode);
-    } catch (err) {
-        console.error("[FATAL ERROR]", err);
-    } finally {
-        await parser.dispose(true);
-    }
-})();
+module.exports = UakeyParser;
