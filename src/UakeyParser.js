@@ -1,6 +1,6 @@
-const { Builder, Browser, By, until, Key } = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
-const Debuger = require("./Debuger");
+import { Builder, Browser, By, until, Key } from "selenium-webdriver";
+import chrome from "selenium-webdriver/chrome.js";
+import Debuger from "./Debuger.js";
 
 class UakeyParser {
     constructor() {
@@ -103,4 +103,4 @@ class UakeyParser {
     }  
 }
 
-module.exports = UakeyParser;
+export default UakeyParser;

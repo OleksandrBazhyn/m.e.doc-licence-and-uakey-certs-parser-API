@@ -4,7 +4,7 @@
   "description": "Parse information from uakey.com.ua and medoc.ua to represent it on a website.",
   "license": "ISC",
   "author": "Oleksandr Bazhyn",
-  "type": "commonjs",
+  "type": "module",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app",

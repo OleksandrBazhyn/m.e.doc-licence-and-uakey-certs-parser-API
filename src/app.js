@@ -1,4 +1,4 @@
-const UakeyParser = require("./UakeyParser");
+import UakeyParser from "./UakeyParser.js";
 
 // Testing script
 (async () => {
