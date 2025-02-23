@@ -1,17 +1,23 @@
 import UakeyParser from "./UakeyParser.js";
 import fs from "node:fs";
 
-// Testing script
 (async () => {
-    let parser = new UakeyParser();
+    const debugMode = false;
+    const parser = new UakeyParser(debugMode);
+    
     try {
-        let debugMode = true;
-        await parser.init(debugMode);
-        let certs = await parser.getFullInfo(27272727, debugMode);
-        fs.writeFileSync("certificates.json", JSON.stringify(certs, null, 2), "utf-8");
+        await parser.init();
+        const certs = await parser.getFullInfo(2804120785);
+        
+        if (certs) {
+            fs.writeFileSync("certificates.json", JSON.stringify(certs, null, 2), "utf-8");
+            console.log("Certificates saved successfully.");
+        } else {
+            console.warn("No certificates found or an error occurred.");
+        }
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {
-        await parser.dispose(true);
+        await parser.dispose();
     }
 })();

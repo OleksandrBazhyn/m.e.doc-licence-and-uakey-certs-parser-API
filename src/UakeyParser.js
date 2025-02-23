@@ -3,121 +3,99 @@ import chrome from "selenium-webdriver/chrome.js";
 import Debuger from "./Debuger.js";
 
 class UakeyParser {
-    constructor() {
+    constructor(debugMode = false) {
         this.driver = null;
+        this.debugMode = debugMode;
     }
 
-    async init(debugMode = false) {
-        if (debugMode) console.log(`UakeyParser: Initializing WebDriver...`);
-
-        let options = new chrome.Options();
-        if (!debugMode) {
+    async init() {
+        this.log("Initializing WebDriver...");
+        const options = new chrome.Options();
+        if (!this.debugMode) {
             options.addArguments("--headless", "--window-size=1920,1080");
         }
-
         this.driver = await new Builder().forBrowser(Browser.CHROME).setChromeOptions(options).build();
     }
 
-    async dispose(debugMode = false) {
-        if (debugMode) console.log("UakeyParser: Disposing WebDriver...");
+    async dispose() {
+        this.log("Disposing WebDriver...");
         if (this.driver) {
             await this.driver.quit();
+            this.driver = null;
         }
-        if (debugMode) console.log("UakeyParser: WebDriver disposed.");
+    }
+
+    log(message) {
+        if (this.debugMode) console.log(`UakeyParser: ${message}`);
+    }
+
+    async navigateTo(url) {
+        this.log(`Navigating to ${url}`);
+        await this.driver.get(url);
+        await this.driver.wait(until.elementLocated(By.css("body")), 1000);
+    }
+
+    async openSearchModal() {
+        this.log("Opening search modal manually...");
+        await this.driver.executeScript(`
+            let modal = document.getElementById("searchEcp");
+            if (modal) {
+                modal.classList.add("in");
+                modal.style.display = "block";
+            }
+        `);
+        await this.driver.sleep(500);
+    }
+
+    async searchUSREOU(USREOU) {
+        const inputField = await this.waitForElement(".search-signature");
+        await inputField.click();
+        await inputField.clear();
+        await inputField.sendKeys(USREOU, Key.RETURN);
+        await this.driver.sleep(2000);
+    }
+
+    async extractCertificates() {
+        this.log("Extracting certificate data...");
+        const rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
+        if (rows.length === 0) {
+            this.log("No results found.");
+            return [];
+        }
+        
+        return Promise.all(rows.map(async (row) => {
+            return {
+                cloudkey: (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0,
+                name: await row.findElement(By.css(".result-item-name:not(.cloud) p")).getText(),
+                endDate: await row.findElement(By.css(".result-item-date")).getText(),
+                certType: await row.findElement(By.css(".result-item-use p")).getText(),
+                signType: await row.findElement(By.css(".result-item-use span")).getText(),
+                downloadLink: await row.findElement(By.css(".result-item-img a")).getAttribute("href"),
+            };
+        }));
+    }
+
+    async getFullInfo(USREOU) {
+        if (!this.driver) throw new Error("Driver not initialized");
+        const debuger = new Debuger(this.driver);
+
+        try {
+            await this.navigateTo("https://uakey.com.ua/");
+            await this.openSearchModal();
+            await this.searchUSREOU(USREOU);
+            return await this.extractCertificates();
+        } catch (err) {
+            console.error("[ERROR] Exception in getFullInfo:", err);
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            await debuger.takeScreenshot(`error-${timestamp}.png`, this.debugMode);
+            await debuger.getPageSource(`error_page_source-${timestamp}.html`, this.debugMode);
+            return null;
+        }
     }
 
     async waitForElement(selector, timeout = 5000) {
         return await this.driver.wait(until.elementLocated(By.css(selector)), timeout);
     }
-
-    async getFullInfo(USREOU, debugMode = false) {
-        let debuger;
-        try {
-            if (!this.driver) throw new Error("Driver not initialized");
-            debuger = new Debuger(this.driver);
-    
-            if (debugMode) console.log("UakeyParser: Navigating to https://uakey.com.ua/");
-            await this.driver.get("https://uakey.com.ua/");
-            await this.driver.wait(until.elementLocated(By.css("body")), 1000);
-            if (debugMode) console.log("UakeyParser: Page loaded!");
-    
-            // Open modal window directly by modifying its attributes
-            if (debugMode) console.log("UakeyParser: Opening search modal manually...");
-            await this.driver.executeScript(`
-                let modal = document.getElementById("searchEcp");
-                if (modal) {
-                    modal.classList.add("in");
-                    modal.style.display = "block";
-                }
-            `);
-            await this.driver.sleep(500); // Wait a bit to ensure UI updates
-    
-            let inputField = await this.driver.wait(
-                until.elementLocated(By.css('.search-signature')),
-                5000
-            );
-    
-            // Click on input field to focus
-            await inputField.click();
-    
-            // Clear the input field
-            await inputField.clear();
-    
-            // Send USREOU as keystrokes
-            await inputField.sendKeys(USREOU, Key.RETURN);
-    
-            // Wait for the results to load
-            await this.driver.sleep(2000);                    
-            
-            // Extracting data from the search results
-            let rows = [];
-            try {
-                rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
-
-                if (rows.length > 0) {
-                    console.log("Items found!");
-                } else {
-                    console.log("No results.");
-                }
-
-                let certificates = [];
-
-                for (let row of rows) {
-                    let cloudkey = (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0;
-                    let name = await row.findElement(By.css(".result-item-name:not(.cloud) p")).getText();
-                    let endDate = await row.findElement(By.css(".result-item-date")).getText();
-                    let certType = await row.findElement(By.css(".result-item-use p")).getText();
-                    let signType = await row.findElement(By.css(".result-item-use span")).getText();
-                    let downloadLink = await row.findElement(By.css(".result-item-img a")).getAttribute("href");
-
-                    certificates.push({
-                        cloudkey,
-                        name,
-                        endDate,
-                        certType,
-                        signType,
-                        downloadLink
-                    });
-                }
-
-                return certificates;
-            } catch (error) {
-                console.warn("The elements have not yet appeared:", error);
-            }
-        } catch (err) {
-            console.error("[ERROR] Exception in getFullInfo:", err);
-            if (debuger) {
-                const getFormattedDate = () => {
-                    const now = new Date();
-                    return now.toISOString().replace(/[:.]/g, '-');
-                };
-                
-                await debuger.takeScreenshot(`error-${getFormattedDate()}.png`, debugMode);
-                await debuger.getPageSource(`error_page_source-${getFormattedDate()}.html`, debugMode);                
-            }
-            return null;
-        }
-    }  
 }
 
 export default UakeyParser;
