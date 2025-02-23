@@ -3,17 +3,17 @@ import MedocParser from "./MedocParser.js";
 import fs from "node:fs";
 
 (async () => {
-    const USREOU = 27272727;
+    const USREOU = 2804120785;
     const debugMode = true;
 
-    const uakeyParser = new UakeyParser(debugMode);
+    const uakeyParser = new UakeyParser();
     const medocParser = new MedocParser(debugMode);
     
     try {
         await uakeyParser.init();
         const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
         await medocParser.init();
-        await medocParser.getFullInfo(USREOU);
+        //await medocParser.getFullInfo(USREOU); //
         
         if (uakeyCerts) {
              fs.writeFileSync("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");

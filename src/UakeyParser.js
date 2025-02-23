@@ -29,10 +29,13 @@ class UakeyParser extends BaseParser {
         const rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
         if (rows.length === 0) {
             this.log("No results found.");
-            return [];
+            return {
+                errorId: 1,
+                data: null
+            };
         }
     
-        const results = await Promise.all(rows.map(async (row) => {
+        const data = await Promise.all(rows.map(async (row) => {
             try {
                 return {
                     code: USREOU,
@@ -49,7 +52,10 @@ class UakeyParser extends BaseParser {
             }
         }));
     
-        return results.filter(item => item !== null);
+        return {
+            errorId: 0,
+            data
+        };
     }
     
     async getTextSafe(row, selector) {

@@ -21,7 +21,6 @@ class MedocParser extends BaseParser {
         };
     
         try {
-            // Очікуємо відповідь від createTask
             const res = await axios.post('https://api.capsolver.com/createTask', payload, {
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -42,8 +41,6 @@ class MedocParser extends BaseParser {
                 const resp = await axios.post("https://api.capsolver.com/getTaskResult", getResultPayload, {
                     headers: { 'Content-Type': 'application/json' }
                 });
-    
-                // this.log(`Captcha status: ${JSON.stringify(resp.data, null, 2)}`);
     
                 if (resp.data.status === "ready") {
                     return resp.data.solution.gRecaptchaResponse;
@@ -69,8 +66,6 @@ class MedocParser extends BaseParser {
             this.log("[ERROR] Captcha solving failed. Aborting.");
             return;
         }
-        
-        this.log(`Our TOKEN RESPONSE: ${token}`);
     
         await this.driver.executeScript(`
             document.getElementsByClassName('edrpou')[0].value = arguments[0];
@@ -87,6 +82,26 @@ class MedocParser extends BaseParser {
         await this.driver.wait(until.elementLocated(By.css(".popupRes")), 5000);
     }
     
+    async extractLicenseInfo(USREOU) {
+        this.log("Extracting license data...");
+    
+        try {
+            const popupRes = await this.driver.wait(async () => {
+                const elements = await this.driver.findElements(By.css(".popupRes"));
+                return elements.length > 0 ? elements[0] : null;
+            }, 2000);
+    
+            if (!popupRes) {
+                this.log("[INFO] No license information found.");
+                return null;
+            }
+    
+            return popupRes;
+        } catch (error) {
+            this.log(`[ERROR] Failed to extract license information: ${error.message}`);
+            return null;
+        }
+    }    
 
     async getFullInfo(USREOU) {
         if (!this.driver) throw new Error("Driver not initialized");
@@ -95,7 +110,7 @@ class MedocParser extends BaseParser {
         try {
             await this.navigateTo("https://medoc.ua/getcode");
             await this.searchUSREOU(USREOU);
-            // await this.extractLicenseInfo();
+            return await this.extractLicenseInfo(USREOU);
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
