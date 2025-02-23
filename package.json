@@ -4,10 +4,13 @@
   "description": "Parse information from uakey.com.ua and medoc.ua to represent it on a website.",
   "license": "ISC",
   "author": "Oleksandr Bazhyn",
-  "type": "commonjs",
+  "type": "module",
   "main": "src/app.js",
   "scripts": {
-    "start": "node src/app",
+    "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.28.1"
   }
 }
