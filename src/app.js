@@ -6,7 +6,7 @@ import UakeyParser from "./UakeyParser.js";
     try {
         let debugMode = true;
         await parser.init(debugMode);
-        await parser.getFullInfo(2804120785, debugMode);
+        await parser.getFullInfo(27272727, debugMode);
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {

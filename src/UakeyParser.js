@@ -81,25 +81,32 @@ class UakeyParser {
                     console.log("No results.");
                 }
 
+                let certificates = [];
+
                 for (let row of rows) {
                     let cloudkey = (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0;
-                    let name = await row.findElement(By.xpath("(//div[contains(@class, 'result-item-name')])[2]")).getText();
+                    let name = await row.findElement(By.css(".result-item-name:not(.cloud) p")).getText();
                     let endDate = await row.findElement(By.css(".result-item-date")).getText();
-                    let type = await row.findElement(By.css(".result-item-use")).getAttribute("innerHTML");
+                    let certType = await row.findElement(By.css(".result-item-use p")).getText();
+                    let signType = await row.findElement(By.css(".result-item-use span")).getText();
                     let downloadLink = await row.findElement(By.css(".result-item-img a")).getAttribute("href");
-                    console.log(`cloudkey: ${cloudkey};\tname: ${name};\tend date: ${endDate};\ttype: ${type};\tdownload link: ${downloadLink};`);
-                }                
+
+                    certificates.push({
+                        cloudkey,
+                        name,
+                        endDate,
+                        certType,
+                        signType,
+                        downloadLink
+                    });
+                }
+                
+                fs.writeFileSync("certificates.json", JSON.stringify(certificates, null, 2), "utf-8");              
 
                 
             } catch (error) {
                 console.warn("The elements have not yet appeared:", error);
             }
-
-
-            //
-            fs.writeFileSync("test.json", JSON.stringify(rows, null));
-
-
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             if (debuger) {

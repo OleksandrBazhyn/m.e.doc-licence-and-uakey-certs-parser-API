@@ -1,0 +1,18 @@
+[
+  {
+    "cloudkey": true,
+    "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+    "endDate": "18.10.2024 - 17.10.2026",
+    "certType": "Підписання",
+    "signType": "Директор",
+    "downloadLink": "https://uakey.com.ua/api/certificate/download/14900220"
+  },
+  {
+    "cloudkey": true,
+    "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+    "endDate": "18.10.2024 - 17.10.2026",
+    "certType": "Шифрування",
+    "signType": "Директор",
+    "downloadLink": "https://uakey.com.ua/api/certificate/download/14900213"
+  }
+]
