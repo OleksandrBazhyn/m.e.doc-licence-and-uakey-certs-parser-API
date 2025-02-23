@@ -10,19 +10,17 @@ import fs from "node:fs";
     const medocParser = new MedocParser(debugMode);
     
     try {
-        // await uakeyParser.init();
-        // const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
-        
-        // if (uakeyCerts) {
-        //     fs.writeFileSync("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
-        //     console.log("Uakey certificates saved successfully.");
-        // } else {
-        //     console.warn("No Uakey certificates found or an error occurred.");
-        // }
-
+        await uakeyParser.init();
+        const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
         await medocParser.init();
         await medocParser.getFullInfo(USREOU);
-
+        
+        if (uakeyCerts) {
+             fs.writeFileSync("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
+             console.log("Uakey certificates saved successfully.");
+         } else {
+             console.warn("No Uakey certificates found or an error occurred.");
+        }
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {

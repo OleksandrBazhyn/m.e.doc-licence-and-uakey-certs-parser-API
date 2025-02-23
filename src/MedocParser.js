@@ -83,8 +83,7 @@ class MedocParser extends BaseParser {
                 submitButton.click();
             }
         `, USREOU, token);
-    
-        await this.driver.sleep(10000); //
+
         await this.driver.wait(until.elementLocated(By.css(".popupRes")), 5000);
     }
     
@@ -96,6 +95,7 @@ class MedocParser extends BaseParser {
         try {
             await this.navigateTo("https://medoc.ua/getcode");
             await this.searchUSREOU(USREOU);
+            // await this.extractLicenseInfo();
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');

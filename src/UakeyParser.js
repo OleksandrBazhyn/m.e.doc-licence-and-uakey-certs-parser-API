@@ -23,23 +23,45 @@ class UakeyParser extends BaseParser {
         await this.driver.sleep(2000);
     }
 
-    async extractCertificates() {
+    async extractCertificates(USREOU) {
         this.log("Extracting certificate data...");
+        
         const rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
         if (rows.length === 0) {
             this.log("No results found.");
             return [];
         }
-
-        return Promise.all(rows.map(async (row) => ({
-            cloudkey: (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0,
-            name: await row.findElement(By.css(".result-item-name:not(.cloud) p")).getText(),
-            endDate: await row.findElement(By.css(".result-item-date")).getText(),
-            certType: await row.findElement(By.css(".result-item-use p")).getText(),
-            signType: await row.findElement(By.css(".result-item-use span")).getText(),
-            downloadLink: await row.findElement(By.css(".result-item-img a")).getAttribute("href"),
-        })));
+    
+        const results = await Promise.all(rows.map(async (row) => {
+            try {
+                return {
+                    code: USREOU,
+                    cloudkey: (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0,
+                    name: await this.getTextSafe(row, ".result-item-name:not(.cloud) p"),
+                    endDate: await this.getTextSafe(row, ".result-item-date"),
+                    certType: await this.getTextSafe(row, ".result-item-use p"),
+                    signType: await this.getTextSafe(row, ".result-item-use span"),
+                    downloadLink: await this.getAttributeSafe(row, ".result-item-img a", "href"),
+                };
+            } catch (error) {
+                this.log(`[ERROR] Failed to extract certificate: ${error.message}`);
+                return null;
+            }
+        }));
+    
+        return results.filter(item => item !== null);
     }
+    
+    async getTextSafe(row, selector) {
+        const elements = await row.findElements(By.css(selector));
+        return elements.length ? await elements[0].getText() : "";
+    }
+    
+    async getAttributeSafe(row, selector, attribute) {
+        const elements = await row.findElements(By.css(selector));
+        return elements.length ? await elements[0].getAttribute(attribute) : "";
+    }
+    
 
     async getFullInfo(USREOU) {
         if (!this.driver) throw new Error("Driver not initialized");
@@ -49,7 +71,7 @@ class UakeyParser extends BaseParser {
             await this.navigateTo("https://uakey.com.ua/");
             await this.openSearchModal();
             await this.searchUSREOU(USREOU);
-            return await this.extractCertificates();
+            return await this.extractCertificates(USREOU);
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
