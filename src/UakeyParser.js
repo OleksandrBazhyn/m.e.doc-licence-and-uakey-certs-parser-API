@@ -77,7 +77,7 @@ class UakeyParser {
 
     async getFullInfo(USREOU) {
         if (!this.driver) throw new Error("Driver not initialized");
-        const debuger = new Debuger(this.driver);
+        const debuger = new Debuger(this.driver, this.debugMode);
 
         try {
             await this.navigateTo("https://uakey.com.ua/");
@@ -87,8 +87,8 @@ class UakeyParser {
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            await debuger.takeScreenshot(`error-${timestamp}.png`, this.debugMode);
-            await debuger.getPageSource(`error_page_source-${timestamp}.html`, this.debugMode);
+            await debuger.takeScreenshot(`error-${timestamp}.png`);
+            await debuger.getPageSource(`error_page_source-${timestamp}.html`);
             return null;
         }
     }

@@ -2,17 +2,19 @@ import fs from "node:fs";
 import path from "node:path";
 
 class Debuger {
-    constructor(driver) {
+    constructor(driver, debugMode = false) {
         this.driver = driver;
         this.debugDir = path.join(process.cwd(), "./debug/");
+
+        this.debugMode = debugMode;
 
         if (!fs.existsSync(this.debugDir)) {
             fs.mkdirSync(this.debugDir, { recursive: true });
         }
     }
 
-    async takeScreenshot(filename = "screenshot.png", debugMode = false) {
-        if (!debugMode || !this.driver) return;
+    async takeScreenshot(filename = "screenshot.png") {
+        if (!this.debugMode || !this.driver) return;
         try {
             const filePath = path.join(this.debugDir, filename);
             console.log(`[DEBUG] Taking screenshot: ${filePath}`);
@@ -23,8 +25,8 @@ class Debuger {
         }
     }
 
-    async getPageSource(filename = "page_source.html", debugMode = false) {
-        if (!debugMode || !this.driver) return;
+    async getPageSource(filename = "page_source.html") {
+        if (!this.debugMode || !this.driver) return;
         try {
             const filePath = path.join(this.debugDir, filename);
             console.log(`[DEBUG] Saving page source: ${filePath}`);

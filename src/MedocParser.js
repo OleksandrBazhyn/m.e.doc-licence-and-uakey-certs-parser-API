@@ -38,6 +38,22 @@ class MedocParser {
         await this.driver.get(url);
         await this.driver.wait(until.elementLocated(By.css("body")), 1000);
     }
+
+    async getFullInfo(USREOU) {
+        if (!this.driver) throw new Error("Driver not initialized");
+        const debuger = new Debuger(this.driver, this.debugMode);
+
+        try {
+            await this.navigateTo("https://medoc.ua/getcode");
+            
+        } catch (err) {
+            console.error("[ERROR] Exception in getFullInfo:", err);
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            await debuger.takeScreenshot(`error-${timestamp}.png`);
+            await debuger.getPageSource(`error_page_source-${timestamp}.html`);
+            return null;
+        }
+    }
 }
 
 export default MedocParser;
