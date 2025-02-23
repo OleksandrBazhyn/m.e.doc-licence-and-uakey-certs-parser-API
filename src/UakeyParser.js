@@ -1,5 +1,4 @@
-import { Builder, Browser, By, until, Key } from "selenium-webdriver";
-import chrome from "selenium-webdriver/chrome.js";
+import { Builder, Browser, By, until, Key, chrome } from "selenium-webdriver";
 import Debuger from "./Debuger.js";
 
 class UakeyParser {
