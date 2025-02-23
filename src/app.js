@@ -5,21 +5,20 @@ import fs from "node:fs";
 (async () => {
     const USREOU = 2804120785;
     const debugMode = true;
-    // const UKparser = new UakeyParser(debugMode);
+
+    const uakeyParser = new UakeyParser(debugMode);
     const medocParser = new MedocParser(debugMode);
     
     try {
-        // await UKparser.init();
-
-        // const certs = await UKparser.getFullInfo(USREOU);
+        await uakeyParser.init();
+        const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
         
-        // if (certs) {
-        //     fs.writeFileSync("certificates.json", JSON.stringify(certs, null, 2), "utf-8");
-        //     console.log("Certificates saved successfully.");
-        // } else {
-        //     console.warn("No certificates found or an error occurred.");
-        // }
-
+        if (uakeyCerts) {
+            fs.writeFileSync("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
+            console.log("Uakey certificates saved successfully.");
+        } else {
+            console.warn("No Uakey certificates found or an error occurred.");
+        }
 
         await medocParser.init();
         await medocParser.getFullInfo(USREOU);
@@ -27,6 +26,7 @@ import fs from "node:fs";
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {
+        await uakeyParser.dispose();
         await medocParser.dispose();
     }
 })();
