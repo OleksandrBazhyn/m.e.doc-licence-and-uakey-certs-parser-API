@@ -1,7 +1,6 @@
 import { Builder, Browser, By, until, Key } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome.js";
 import Debuger from "./Debuger.js";
-import fs from "node:fs"; //
 
 class UakeyParser {
     constructor() {
@@ -100,10 +99,8 @@ class UakeyParser {
                         downloadLink
                     });
                 }
-                
-                fs.writeFileSync("certificates.json", JSON.stringify(certificates, null, 2), "utf-8");              
 
-                
+                return certificates;
             } catch (error) {
                 console.warn("The elements have not yet appeared:", error);
             }

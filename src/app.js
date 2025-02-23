@@ -1,4 +1,5 @@
 import UakeyParser from "./UakeyParser.js";
+import fs from "node:fs";
 
 // Testing script
 (async () => {
@@ -6,7 +7,8 @@ import UakeyParser from "./UakeyParser.js";
     try {
         let debugMode = true;
         await parser.init(debugMode);
-        await parser.getFullInfo(27272727, debugMode);
+        let certs = await parser.getFullInfo(27272727, debugMode);
+        fs.writeFileSync("certificates.json", JSON.stringify(certs, null, 2), "utf-8");
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {
