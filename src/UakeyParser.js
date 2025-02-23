@@ -1,39 +1,8 @@
-import { Builder, Browser, By, until, Key, chrome } from "selenium-webdriver";
+import { By, Key } from "selenium-webdriver";
+import BaseParser from "./BaseParser.js";
 import Debuger from "./Debuger.js";
 
-class UakeyParser {
-    constructor(debugMode = false) {
-        this.driver = null;
-        this.debugMode = debugMode;
-    }
-
-    async init() {
-        this.log("Initializing WebDriver...");
-        const options = new chrome.Options();
-        if (!this.debugMode) {
-            options.addArguments("--headless", "--window-size=1920,1080");
-        }
-        this.driver = await new Builder().forBrowser(Browser.CHROME).setChromeOptions(options).build();
-    }
-
-    async dispose() {
-        this.log("Disposing WebDriver...");
-        if (this.driver) {
-            await this.driver.quit();
-            this.driver = null;
-        }
-    }
-
-    log(message) {
-        if (this.debugMode) console.log(`UakeyParser: ${message}`);
-    }
-
-    async navigateTo(url) {
-        this.log(`Navigating to ${url}`);
-        await this.driver.get(url);
-        await this.driver.wait(until.elementLocated(By.css("body")), 1000);
-    }
-
+class UakeyParser extends BaseParser {
     async openSearchModal() {
         this.log("Opening search modal manually...");
         await this.driver.executeScript(`
@@ -61,17 +30,15 @@ class UakeyParser {
             this.log("No results found.");
             return [];
         }
-        
-        return Promise.all(rows.map(async (row) => {
-            return {
-                cloudkey: (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0,
-                name: await row.findElement(By.css(".result-item-name:not(.cloud) p")).getText(),
-                endDate: await row.findElement(By.css(".result-item-date")).getText(),
-                certType: await row.findElement(By.css(".result-item-use p")).getText(),
-                signType: await row.findElement(By.css(".result-item-use span")).getText(),
-                downloadLink: await row.findElement(By.css(".result-item-img a")).getAttribute("href"),
-            };
-        }));
+
+        return Promise.all(rows.map(async (row) => ({
+            cloudkey: (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0,
+            name: await row.findElement(By.css(".result-item-name:not(.cloud) p")).getText(),
+            endDate: await row.findElement(By.css(".result-item-date")).getText(),
+            certType: await row.findElement(By.css(".result-item-use p")).getText(),
+            signType: await row.findElement(By.css(".result-item-use span")).getText(),
+            downloadLink: await row.findElement(By.css(".result-item-img a")).getAttribute("href"),
+        })));
     }
 
     async getFullInfo(USREOU) {
@@ -90,10 +57,6 @@ class UakeyParser {
             await debuger.getPageSource(`error_page_source-${timestamp}.html`);
             return null;
         }
-    }
-
-    async waitForElement(selector, timeout = 5000) {
-        return await this.driver.wait(until.elementLocated(By.css(selector)), timeout);
     }
 }
 
