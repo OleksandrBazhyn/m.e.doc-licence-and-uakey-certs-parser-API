@@ -82,9 +82,13 @@ class UakeyParser {
                 }
 
                 for (let row of rows) {
-                    let cloudkey = (await row.findElements(By.xpath(".//div[contains(@class, 'result-item-name') and contains(@class, 'cloud')]//img"))).length > 0;
-                    let name = await row.findElement(By.xpath("(//div[contains(@class, 'result-item-name')])[2]"));
-                }
+                    let cloudkey = (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0;
+                    let name = await row.findElement(By.xpath("(//div[contains(@class, 'result-item-name')])[2]")).getText();
+                    let endDate = await row.findElement(By.css(".result-item-date")).getText();
+                    let type = await row.findElement(By.css(".result-item-use")).getAttribute("innerHTML");
+                    let downloadLink = await row.findElement(By.css(".result-item-img a")).getAttribute("href");
+                    console.log(`cloudkey: ${cloudkey};\tname: ${name};\tend date: ${endDate};\ttype: ${type};\tdownload link: ${downloadLink};`);
+                }                
 
                 
             } catch (error) {
