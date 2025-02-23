@@ -1,6 +1,7 @@
 import { Builder, Browser, By, until, Key } from "selenium-webdriver";
 import chrome from "selenium-webdriver/chrome.js";
 import Debuger from "./Debuger.js";
+import fs from "node:fs"; //
 
 class UakeyParser {
     constructor() {
@@ -73,26 +74,34 @@ class UakeyParser {
             let rows = [];
             try {
                 rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
+
+                if (rows.length > 0) {
+                    console.log("Items found!");
+                } else {
+                    console.log("No results.");
+                }
+
+                for (let row of rows) {
+                    let cloudkey = (await row.findElements(By.xpath(".//div[contains(@class, 'result-item-name') and contains(@class, 'cloud')]//img"))).length > 0;
+                    let name = await row.findElement(By.xpath("(//div[contains(@class, 'result-item-name')])[2]"));
+                }
+
+                
             } catch (error) {
                 console.warn("The elements have not yet appeared:", error);
             }
 
-            if (rows.length > 0) {
-                console.log("Items found!");
-            } else {
-                console.log("No results.");
-            }
 
-            
-            // if (debugMode) console.log("Parsed Results:", parsedResults);
-            
-            // return parsedResults;
+            //
+            fs.writeFileSync("test.json", JSON.stringify(rows, null));
+
+
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             if (debuger) {
                 const getFormattedDate = () => {
                     const now = new Date();
-                    return now.toISOString().replace(/[:.]/g, '-'); // Забираємо проблемні символи
+                    return now.toISOString().replace(/[:.]/g, '-');
                 };
                 
                 await debuger.takeScreenshot(`error-${getFormattedDate()}.png`, debugMode);
