@@ -3,110 +3,37 @@
   "errorDescription": "Success",
   "results": [
     {
-      "USREOU": "3681806271",
-      "errorId": 1,
-      "errorDescription": "No results found.",
-      "data": []
-    },
-    {
-      "USREOU": "45427323",
+      "USREOU": 2804120785,
       "errorId": 0,
       "errorDescription": "Success",
       "data": [
         {
-          "code": "45427323",
-          "cloudkey": false,
-          "name": "ТОВАРИСТВО З ОБМЕЖЕНОЮ ВІДПОВІДАЛЬНІСТЮ «СЕРВІС ЦЕНТР ОТК»",
-          "startDate": "25.07.2024",
-          "endDate": "24.07.2026",
-          "certType": "Підписання",
-          "signType": "Печатка",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14609859"
-        },
-        {
-          "code": "45427323",
-          "cloudkey": false,
-          "name": "ТОВАРИСТВО З ОБМЕЖЕНОЮ ВІДПОВІДАЛЬНІСТЮ «СЕРВІС ЦЕНТР ОТК»",
-          "startDate": "25.07.2024",
-          "endDate": "24.07.2026",
-          "certType": "Шифрування",
-          "signType": "Печатка",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14609860"
-        },
-        {
-          "code": "45427323",
-          "cloudkey": false,
-          "name": "Шевченко Іларіон Сергійович",
-          "startDate": "25.07.2024",
-          "endDate": "24.07.2026",
+          "code": 2804120785,
+          "cloudkey": true,
+          "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+          "startDate": "18.10.2024",
+          "endDate": "17.10.2026",
           "certType": "Підписання",
           "signType": "Директор",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14609861"
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14900220"
         },
         {
-          "code": "45427323",
-          "cloudkey": false,
-          "name": "Шевченко Іларіон Сергійович",
-          "startDate": "25.07.2024",
-          "endDate": "24.07.2026",
+          "code": 2804120785,
+          "cloudkey": true,
+          "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+          "startDate": "18.10.2024",
+          "endDate": "17.10.2026",
           "certType": "Шифрування",
           "signType": "Директор",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14609862"
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14900213"
         }
       ]
     },
     {
-      "USREOU": "3141617884",
-      "errorId": 1,
-      "errorDescription": "No results found.",
-      "data": []
-    },
-    {
-      "USREOU": "45598658",
-      "errorId": 0,
-      "errorDescription": "Success",
-      "data": [
-        {
-          "code": "45598658",
-          "cloudkey": false,
-          "name": "ТОВАРИСТВО З ОБМЕЖЕНОЮ ВІДПОВІДАЛЬНІСТЮ «АВТО СЕРТ»",
-          "startDate": "20.06.2024",
-          "endDate": "19.06.2026",
-          "certType": "Підписання",
-          "signType": "Печатка",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14497371"
-        },
-        {
-          "code": "45598658",
-          "cloudkey": false,
-          "name": "Савічев Олександр Юрійович",
-          "startDate": "20.06.2024",
-          "endDate": "19.06.2026",
-          "certType": "Підписання",
-          "signType": "Директор",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14497369"
-        },
-        {
-          "code": "45598658",
-          "cloudkey": false,
-          "name": "Савічев Олександр Юрійович",
-          "startDate": "20.06.2024",
-          "endDate": "19.06.2026",
-          "certType": "Шифрування",
-          "signType": "Директор",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14497370"
-        },
-        {
-          "code": "45598658",
-          "cloudkey": false,
-          "name": "ТОВАРИСТВО З ОБМЕЖЕНОЮ ВІДПОВІДАЛЬНІСТЮ «АВТО СЕРТ»",
-          "startDate": "20.06.2024",
-          "endDate": "19.06.2026",
-          "certType": "Шифрування",
-          "signType": "Печатка",
-          "downloadLink": "https://uakey.com.ua/api/certificate/download/14497368"
-        }
-      ]
+      "USREOU": 2424,
+      "errorId": 3,
+      "errorDescription": "Invalid identifier entered.",
+      "data": null
     }
   ]
 }
