@@ -90,18 +90,53 @@ class MedocParser extends BaseParser {
                 const elements = await this.driver.findElements(By.css(".popupRes"));
                 return elements.length > 0 ? elements[0] : null;
             }, 2000);
-    
-            if (!popupRes) {
-                this.log("[INFO] No license information found.");
-                return null;
-            }
-    
-            return popupRes;
+
+            const licenses = await popupRes.findElements(By.css(".popupRes-dateEnd")).findElements(By.css(".col-md-5"));
+
+            const data = await Promise.all(licenses.map(async (license) => {
+                try {
+                    return {
+                        code: USREOU,
+                        licenseType: await this.getTextSafe(license, ".license"),
+                        blank: await this.getTextSafe(license, ".blank"),
+                        data: await Promise.all((await license.findElements(By.css(".popupRes-dateEnd-item-row")).map(async (module) => {
+                            // find all modules
+                        }))),
+
+                    }
+                } catch (err) {
+                    this.log(`[ERROR] Failed to extract detaile license information: ${error.message}`);
+                    return {
+                        errorId: 2,
+                        errorDescription: "Failed to extract detaile license information.",
+                        data: null
+                    };
+                }
+            }));
+
+            return {
+                errorId: 0,
+                data
+            };
         } catch (error) {
             this.log(`[ERROR] Failed to extract license information: ${error.message}`);
-            return null;
+            return {
+                errorId: 1,
+                errorDescription: "No results found.",
+                data: null
+            };
         }
     }    
+
+    async getTextSafe(row, selector) {
+        const elements = await row.findElements(By.css(selector));
+        return elements.length ? await elements[0].getText() : "";
+    }
+    
+    async getAttributeSafe(row, selector, attribute) {
+        const elements = await row.findElements(By.css(selector));
+        return elements.length ? await elements[0].getAttribute(attribute) : "";
+    }
 
     async getFullInfo(USREOU) {
         if (!this.driver) throw new Error("Driver not initialized");

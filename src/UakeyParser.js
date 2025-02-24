@@ -31,24 +31,37 @@ class UakeyParser extends BaseParser {
             this.log("No results found.");
             return {
                 errorId: 1,
+                errorDescription: "No results found.",
                 data: null
             };
         }
     
         const data = await Promise.all(rows.map(async (row) => {
             try {
+                const rawDate = await this.getTextSafe(row, ".result-item-date");
+    
+                const { startDate, endDate } = (() => {
+                    const match = rawDate.match(/^(\d{2}\.\d{2}\.\d{4}) - (\d{2}\.\d{2}\.\d{4})$/);
+                    return match ? { startDate: match[1], endDate: match[2] } : { startDate: "", endDate: "" };
+                })();
+    
                 return {
                     code: USREOU,
                     cloudkey: (await row.findElements(By.css(".result-item-name.cloud img"))).length > 0,
                     name: await this.getTextSafe(row, ".result-item-name:not(.cloud) p"),
-                    endDate: await this.getTextSafe(row, ".result-item-date"),
+                    startDate,
+                    endDate,
                     certType: await this.getTextSafe(row, ".result-item-use p"),
                     signType: await this.getTextSafe(row, ".result-item-use span"),
                     downloadLink: await this.getAttributeSafe(row, ".result-item-img a", "href"),
                 };
             } catch (error) {
                 this.log(`[ERROR] Failed to extract certificate: ${error.message}`);
-                return null;
+                return {
+                    errorId: 2,
+                    errorDescription: "Failed to extract certificate.",
+                    data: null
+                };
             }
         }));
     
