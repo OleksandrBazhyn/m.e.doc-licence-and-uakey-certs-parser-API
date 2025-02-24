@@ -5,3 +5,6 @@ node_modules/
 debug/
 
 orgs.txt
+certificates.json
+licenses.json
+certificatesTERM.json
