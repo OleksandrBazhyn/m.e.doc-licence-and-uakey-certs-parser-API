@@ -1,25 +1,180 @@
 {
   "errorId": 0,
-  "data": [
+  "errorDescription": "Success",
+  "results": [
     {
-      "code": 2804120785,
-      "cloudkey": true,
-      "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
-      "startDate": "18.10.2024",
-      "endDate": "17.10.2026",
-      "certType": "Підписання",
-      "signType": "Директор",
-      "downloadLink": "https://uakey.com.ua/api/certificate/download/14900220"
+      "USREOU": "2804120785",
+      "errorId": 0,
+      "errorDescription": "Success",
+      "data": [
+        {
+          "code": "2804120785",
+          "cloudkey": true,
+          "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14900220"
+        },
+        {
+          "code": "2804120785",
+          "cloudkey": true,
+          "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14900213"
+        }
+      ]
     },
     {
-      "code": 2804120785,
-      "cloudkey": true,
-      "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
-      "startDate": "18.10.2024",
-      "endDate": "17.10.2026",
-      "certType": "Шифрування",
-      "signType": "Директор",
-      "downloadLink": "https://uakey.com.ua/api/certificate/download/14900213"
+      "USREOU": "14360570",
+      "errorId": 0,
+      "errorDescription": "Success",
+      "data": [
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Бьоркнерт Карл Мікаель",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/15235880"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Бьоркнерт Карл Мікаель",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/15235881"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Залевський Юрій Олександрович",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Співробітник",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14991719"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Залевський Юрій Олександрович",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Співробітник",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14991720"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "ЧАПІСТРАК ЛЮДМИЛА ПАВЛІВНА",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Бухгалтер",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14830149"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "ЧАПІСТРАК ЛЮДМИЛА ПАВЛІВНА",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Бухгалтер",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14830150"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "АКЦІОНЕРНЕ ТОВАРИСТВО КОМЕРЦІЙНИЙ БАНК \"ПРИВАТБАНК\"",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Печатка",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14684688"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "АКЦІОНЕРНЕ ТОВАРИСТВО КОМЕРЦІЙНИЙ БАНК \"ПРИВАТБАНК\"",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Печатка",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14684687"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Гаращенко Олена Євгенівна",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Співробітник",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14684691"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Гаращенко Олена Євгенівна",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Співробітник",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14684692"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Ярмоленко Валентина Василівна",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Бухгалтер",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14684689"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "Ярмоленко Валентина Василівна",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Бухгалтер",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14684690"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "БЬОШ ГЕРХАРД",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/13959215"
+        },
+        {
+          "code": "14360570",
+          "cloudkey": false,
+          "name": "БЬОШ ГЕРХАРД",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/13959214"
+        }
+      ]
     }
   ]
 }
