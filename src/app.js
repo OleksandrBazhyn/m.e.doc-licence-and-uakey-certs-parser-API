@@ -30,26 +30,34 @@ async function findCertificatesExpire(USREOUList) {
 }
 
 (async () => {
-    const USREOU = [2804120785, 2424];
+    const USREOU = [2804120785, 27272727, 2424];
     const debugMode = true;
 
-    const uakeyParser = new UakeyParser();
+    const uakeyParser = new UakeyParser(debugMode);
     const medocParser = new MedocParser(debugMode);
     
     try {
-        await uakeyParser.init();
-        await medocParser.init();
+        // await uakeyParser.init();
         
         // let orgs = await fs.promises.readFile("orgs.txt", "utf-8");
         // orgs = orgs.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
 
         // const certsExpire = await findCertificatesExpire(orgs);
-        const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
+        // const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
 
         // await fs.promises.writeFile("certificatesTERM.json", JSON.stringify(certsExpire, null, 2), "utf-8");
-        await fs.promises.writeFile("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
+        // await fs.promises.writeFile("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
 
-        console.log("Uakey certificates saved successfully.");
+        // console.log("Uakey certificates saved successfully.");
+
+
+        await medocParser.init();
+
+        const licenses = await medocParser.getFullInfo(USREOU);
+
+        await fs.promises.writeFile("licenses.json", JSON.stringify(licenses, null, 2), "utf-8");
+
+        console.log("MEDoc license information saved successfully.");
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {

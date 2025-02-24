@@ -57,76 +57,88 @@ class MedocParser extends BaseParser {
     }
     
     async searchUSREOU(USREOU) {
-        const token = await this.solveCaptcha();
+        try{
+            const token = await this.solveCaptcha();
 
-        let revealed = await this.driver.findElement(By.css(".g-recaptcha"));
-        await this.driver.wait(until.elementIsVisible(revealed), 2000);
-    
-        if (!token) {
-            this.log("[ERROR] Captcha solving failed. Aborting.");
-            return;
-        }
-    
-        await this.driver.executeScript(`
-            document.getElementsByClassName('edrpou')[0].value = arguments[0];
-
-            document.getElementById('g-recaptcha-response').style.display = 'block';
-            document.getElementById('g-recaptcha-response').value = arguments[1];
-
-            var submitButton = document.getElementsByClassName('popup1-btn')[0]; 
-            if (submitButton) {
-                submitButton.click();
+            let revealed = await this.driver.findElement(By.css(".g-recaptcha"));
+            await this.driver.wait(until.elementIsVisible(revealed), 2000);
+        
+            if (!token) {
+                this.log("[ERROR] Captcha solving failed. Aborting.");
+                return;
             }
-        `, USREOU, token);
-
-        await this.driver.wait(until.elementLocated(By.css(".popupRes")), 5000);
+        
+            await this.driver.executeScript(`
+                document.getElementsByClassName('edrpou')[0].value = arguments[0];
+    
+                document.getElementById('g-recaptcha-response').style.display = 'block';
+                document.getElementById('g-recaptcha-response').value = arguments[1];
+    
+                var submitButton = document.getElementsByClassName('popup1-btn')[0]; 
+                if (submitButton) {
+                    submitButton.click();
+                }
+            `, USREOU, token);
+    
+            await this.driver.wait(until.elementLocated(By.css(".popupRes")), 5000);
+        } catch (err) {
+            this.log(`[ERROR] There is no information for this code. Please check that you entered your USREOU code correctly and try again.: ${err}`);
+            return;
+        }        
     }
     
     async extractLicenseInfo(USREOU) {
         this.log("Extracting license data...");
-    
+        
         try {
             const popupRes = await this.driver.wait(async () => {
                 const elements = await this.driver.findElements(By.css(".popupRes"));
                 return elements.length > 0 ? elements[0] : null;
             }, 2000);
-
-            const licenses = await popupRes.findElements(By.css(".popupRes-dateEnd")).findElements(By.css(".col-md-5"));
-
-            const data = await Promise.all(licenses.map(async (license) => {
+    
+            const licenses = await popupRes.findElements(By.css(".popupRes-dateEnd .row:first-of-type .col-md-5"));
+    
+            const license = await Promise.all(licenses.map(async (lic) => {
                 try {
+                    const rows = await lic.findElements(By.css(".popupRes-dateEnd-item-row"));
+                    const modules = await Promise.all(rows.map(async (m, index) => {                    
+                        let elements = await m.findElements(By.css("ul li"));
+                    
+                        if (elements.length < 2) {
+                            console.log(`Not enough items in row ${index}, skipping`);
+                            return {
+                                module: null,
+                                moduleExpire: null
+                            };
+                        }
+                    
+                        const moduleText = await elements[0].getText();
+                        const expireText = await elements[1].getText();
+                                            
+                        return {
+                            module: moduleText.trim() || null,
+                            moduleExpire: expireText.trim() || null
+                        };
+                    }));
+                    
                     return {
                         code: USREOU,
-                        licenseType: await this.getTextSafe(license, ".license"),
-                        blank: await this.getTextSafe(license, ".blank"),
-                        data: await Promise.all((await license.findElements(By.css(".popupRes-dateEnd-item-row")).map(async (module) => {
-                            // find all modules
-                        }))),
-
-                    }
-                } catch (err) {
-                    this.log(`[ERROR] Failed to extract detaile license information: ${error.message}`);
-                    return {
-                        errorId: 2,
-                        errorDescription: "Failed to extract detaile license information.",
-                        data: null
+                        licenseType: (await this.getTextSafe(lic, ".license")).trim(),
+                        blank: (await this.getTextSafe(lic, ".blank")).trim(),
+                        modules
                     };
+                } catch (err) {
+                    this.log(`[ERROR] Failed to extract detailed license information: ${err.message}`);
+                    return;
                 }
             }));
-
-            return {
-                errorId: 0,
-                data
-            };
+    
+            return license;
         } catch (error) {
             this.log(`[ERROR] Failed to extract license information: ${error.message}`);
-            return {
-                errorId: 1,
-                errorDescription: "No results found.",
-                data: null
-            };
+            return [];
         }
-    }    
+    }
 
     async getTextSafe(row, selector) {
         const elements = await row.findElements(By.css(selector));
@@ -138,20 +150,53 @@ class MedocParser extends BaseParser {
         return elements.length ? await elements[0].getAttribute(attribute) : "";
     }
 
-    async getFullInfo(USREOU) {
+    async getFullInfo(USREOUList) {
         if (!this.driver) throw new Error("Driver not initialized");
         const debuger = new Debuger(this.driver, this.debugMode);
 
+        if (!Array.isArray(USREOUList)) {
+            USREOUList = [USREOUList];
+        }
+
+        USREOUList = USREOUList.map(String);
+
+        const results = {};
+
         try {
-            await this.navigateTo("https://medoc.ua/getcode");
-            await this.searchUSREOU(USREOU);
-            return await this.extractLicenseInfo(USREOU);
+            for (const USREOU of USREOUList) {
+                if (USREOU.length < 8) {
+                    results[USREOU] = {
+                        code: USREOU,
+                        license: []
+                    };
+                    continue;
+                }
+
+                await this.navigateTo("https://medoc.ua/getcode");
+                const withoutLicense = await this.searchUSREOU(USREOU);
+
+                if (withoutLicense) {
+                    results[USREOU] = {
+                        code: USREOU,
+                        license: withoutLicense
+                    };
+                    continue;
+                }
+                
+                const license = await this.extractLicenseInfo(USREOU); 
+                results[USREOU] = {
+                    code: USREOU,
+                    license: license
+                };
+            }
+
+            return results
         } catch (err) {
             console.error("[ERROR] Exception in getFullInfo:", err);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             await debuger.takeScreenshot(`error-${timestamp}.png`);
             await debuger.getPageSource(`error_page_source-${timestamp}.html`);
-            return null;
+            return;
         }
     }
 }

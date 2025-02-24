@@ -71,14 +71,14 @@ class UakeyParser extends BaseParser {
 
     async getFullInfo(USREOUList) {
         if (!this.driver) throw new Error("Driver not initialized");
+        const debuger = new Debuger(this.driver, this.debugMode);
     
         if (!Array.isArray(USREOUList)) {
             USREOUList = [USREOUList];
         }
     
-        USREOUList = USREOUList.map(String);
-    
-        const debuger = new Debuger(this.driver, this.debugMode);
+        USREOUList = USREOUList.map(String);    
+        
         const results = {};
     
         try {
