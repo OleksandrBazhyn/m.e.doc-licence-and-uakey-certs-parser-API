@@ -40,7 +40,7 @@ class UakeyParser extends BaseParser {
         const data = await Promise.all(rows.map(async (row) => {
             try {
                 const rawDate = await this.getTextSafe(row, ".result-item-date");
-                const dateMatch = rawDate.match(/^(\\d{2}\.\d{2}\.\d{4}) - (\d{2}\.\d{2}\.\d{4})$/);
+                const dateMatch = rawDate.match(/^(\d{2}\.\d{2}\.\d{4}) - (\d{2}\.\d{2}\.\d{4})$/);
                 const startDate = dateMatch ? dateMatch[1] : null;
                 const endDate = dateMatch ? dateMatch[2] : null;
 

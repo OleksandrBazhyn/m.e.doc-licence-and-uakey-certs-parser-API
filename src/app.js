@@ -6,21 +6,19 @@ import fs from "node:fs";
     const USREOU = [2804120785, 2424];
     const debugMode = true;
 
-    const uakeyParser = new UakeyParser(debugMode);
+    const uakeyParser = new UakeyParser();
     const medocParser = new MedocParser(debugMode);
     
     try {
         await uakeyParser.init();
-        const uakeyCerts = await uakeyParser.getFullInfo(USREOU);
         await medocParser.init();
         //await medocParser.getFullInfo(USREOU); //
         
-        if (uakeyCerts) {
-             fs.writeFileSync("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
-             console.log("Uakey certificates saved successfully.");
-         } else {
-             console.warn("No Uakey certificates found or an error occurred.");
-        }
+        let orgs = await fs.readFileSync("orgs.txt", "utf-8");
+        orgs = orgs.split("\r\n");
+        const uakeyCerts = await uakeyParser.getFullInfo(orgs);
+        fs.writeFileSync("certificates.json", JSON.stringify(uakeyCerts, null, 2), "utf-8");
+        console.log("Uakey certificates saved successfully.");
     } catch (err) {
         console.error("[FATAL ERROR]", err);
     } finally {
