@@ -98,6 +98,14 @@ class UakeyParser extends BaseParser {
             await this.openSearchModal();
             
             for (const USREOU of USREOUList) {
+                if (USREOU.toString().length < 8) {
+                    results.push({ USREOU, ...{
+                        errorId: 3,
+                        errorDescription: "Invalid identifier entered.",
+                        data: null
+                    } });
+                    continue;
+                }
                 await this.searchUSREOU(USREOU);
                 const result = await this.extractCertificates(USREOU);
                 results.push({ USREOU, ...result });
