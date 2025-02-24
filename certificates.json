@@ -1,25 +1,39 @@
 {
   "errorId": 0,
-  "data": [
+  "errorDescription": "Success",
+  "results": [
     {
-      "code": 2804120785,
-      "cloudkey": true,
-      "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
-      "startDate": "18.10.2024",
-      "endDate": "17.10.2026",
-      "certType": "Підписання",
-      "signType": "Директор",
-      "downloadLink": "https://uakey.com.ua/api/certificate/download/14900220"
+      "USREOU": 2804120785,
+      "errorId": 0,
+      "errorDescription": "Success",
+      "data": [
+        {
+          "code": 2804120785,
+          "cloudkey": true,
+          "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Підписання",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14900220"
+        },
+        {
+          "code": 2804120785,
+          "cloudkey": true,
+          "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
+          "startDate": null,
+          "endDate": null,
+          "certType": "Шифрування",
+          "signType": "Директор",
+          "downloadLink": "https://uakey.com.ua/api/certificate/download/14900213"
+        }
+      ]
     },
     {
-      "code": 2804120785,
-      "cloudkey": true,
-      "name": "СМАРОВОЗ ОЛЬГА БОГДАНІВНА",
-      "startDate": "18.10.2024",
-      "endDate": "17.10.2026",
-      "certType": "Шифрування",
-      "signType": "Директор",
-      "downloadLink": "https://uakey.com.ua/api/certificate/download/14900213"
+      "USREOU": 2424,
+      "errorId": 3,
+      "errorDescription": "Invalid identifier entered.",
+      "data": null
     }
   ]
 }

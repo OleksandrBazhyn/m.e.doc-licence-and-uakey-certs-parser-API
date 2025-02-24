@@ -3,10 +3,10 @@ import MedocParser from "./MedocParser.js";
 import fs from "node:fs";
 
 (async () => {
-    const USREOU = 2804120785;
+    const USREOU = [2804120785, 2424];
     const debugMode = true;
 
-    const uakeyParser = new UakeyParser();
+    const uakeyParser = new UakeyParser(debugMode);
     const medocParser = new MedocParser(debugMode);
     
     try {
