@@ -1,0 +1,19 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+input {
+    padding: 10px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
