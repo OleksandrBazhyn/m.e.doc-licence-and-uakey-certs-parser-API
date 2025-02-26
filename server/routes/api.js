@@ -43,7 +43,7 @@ router.get("/uakey/:usreou", async (req, res) => {
 
 router.get("/medoc/:usreou", async (req, res) => {
     const usreou = req.params.usreou.split("+");
-    const uakeyParser = new UakeyParser();
+    const medocParser = new MedocParser();
 
     try {
         await medocParser.init();
