@@ -5,9 +5,9 @@ import UakeyParser from "../parsers/UakeyParser.js";
 const router = express.Router();
 
 router.get("/search/:usreou", async (req, res) => {
-    const usreou = req.params.usreou;
-    const medocParser = new MedocParser(true);
-    const uakeyParser = new UakeyParser(true);
+    const usreou = req.params.usreou.split("+");
+    const medocParser = new MedocParser();
+    const uakeyParser = new UakeyParser();
 
     try {
         await medocParser.init();
