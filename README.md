@@ -17,6 +17,10 @@ npm run start
 ```
 ## Features & Uses
 This repository allows you to easily parse the information needed to track the status of electronic signatures and licenses of the M.E.Doc program in the absence of a direct API.
-There is a way to get data on two resources in JSON format via the path /api/search/:usreou.
+
+There is a way to get data on two resources in JSON format via the path /api/search/:usreou
+
 To get only information about electronic signatures: /api/uakey/:usreou
+
 To get only information about the M.E.Doc license: /api/medoc/:usreou
+
