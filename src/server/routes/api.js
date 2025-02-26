@@ -12,15 +12,15 @@ router.get("/search/:usreou", async (req, res) => {
     try {
         await medocParser.init();
         const medocData = await medocParser.getFullInfo(usreou);
-        await medocParser.close();
+        await medocParser.dispose();
 
         await uakeyParser.init();
         const uakeyData = await uakeyParser.getFullInfo(usreou);
-        await uakeyParser.close();
+        await uakeyParser.dispose();
 
         res.json({ medoc: medocData, uakey: uakeyData });
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch data" });
+        res.status(500).json({ error: "Failed to fetch data", errorDescription: error});
     }
 });
 
