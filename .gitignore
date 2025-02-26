@@ -8,3 +8,6 @@ orgs.txt
 certificates.json
 licenses.json
 certificatesTERM.json
+
+.vscode/
+!.vscode/launch.json
