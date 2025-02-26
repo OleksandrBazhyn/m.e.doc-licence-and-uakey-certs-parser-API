@@ -24,3 +24,5 @@ To get only information about electronic signatures: /api/uakey/:usreou
 
 To get only information about the M.E.Doc license: /api/medoc/:usreou
 
+
+This data can already be processed further. An example of the client part is also available in the repository.
