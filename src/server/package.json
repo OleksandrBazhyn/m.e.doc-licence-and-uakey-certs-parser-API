@@ -1,0 +1,23 @@
+{
+    "name": "m.e.doc-licence-and-uakey-qes-tracker-api-server",
+    "version": "1.0.0",
+    "description": "Parse information from uakey.com.ua and medoc.ua to represent it on a website.",
+    "license": "ISC",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "dependencies": {
+        "axios": "^1.8.1",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "node-cache": "^5.1.2",
+        "selenium-webdriver": "^4.29.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.0"
+    }
+}

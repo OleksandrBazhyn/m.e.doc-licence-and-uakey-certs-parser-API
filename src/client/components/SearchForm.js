@@ -1,13 +1,25 @@
-export default function SearchForm({ usreou, setUsreou, onSearch }) {
+import { useState } from "react";
+
+function SearchForm({ onDataFetched }) {
+    const [usreou, setUsreou] = useState("");
+
+    const handleSearch = async () => {
+        const response = await fetch(`/api/search/${usreou}`);
+        const result = await response.json();
+        onDataFetched(result);
+    };
+
     return (
         <div>
-            <input 
-                type="text" 
-                value={usreou} 
-                onChange={(e) => setUsreou(e.target.value)} 
-                placeholder="Введіть USREOU"
+            <input
+                type="text"
+                placeholder="Введіть код ЄДРПОУ"
+                value={usreou}
+                onChange={(e) => setUsreou(e.target.value)}
             />
-            <button onClick={onSearch}>Шукати</button>
+            <button onClick={handleSearch}>Пошук</button>
         </div>
     );
 }
+
+export default SearchForm;

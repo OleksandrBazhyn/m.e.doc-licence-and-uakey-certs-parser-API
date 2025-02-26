@@ -4,9 +4,10 @@ import Debuger from "./Debuger.js";
 import axios from "axios";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config({ path: '../server/.env' });
+
 const apiKey = process.env.CAPSOLVER_API_KEY;
-const websiteKey = "6LfdGkAUAAAAAAIGzEn-u1dYmw2lCBPb_HZXg9gQ";
+const websiteKey = process.env.WebSiteKey;
 const websiteURL = "https://medoc.ua/getcode";
 
 class MedocParser extends BaseParser {
