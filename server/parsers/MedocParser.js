@@ -2,15 +2,18 @@ import { By, until, Key } from "selenium-webdriver";
 import BaseParser from "./BaseParser.js";
 import Debuger from "./Debuger.js";
 import axios from "axios";
-import dotenv from "dotenv";
 
-dotenv.config();
 const apiKey = process.env.CAPSOLVER_API_KEY;
-const websiteKey = "6LfdGkAUAAAAAAIGzEn-u1dYmw2lCBPb_HZXg9gQ";
+const websiteKey = process.env.WebSiteKey;
 const websiteURL = "https://medoc.ua/getcode";
 
 class MedocParser extends BaseParser {
     async solveCaptcha() {
+        if (!apiKey) {
+            this.log("[ERROR] Captcha solving failed. No api key. Aborting.");
+            return;
+        }
+
         const payload = {
             clientKey: apiKey,
             task: {

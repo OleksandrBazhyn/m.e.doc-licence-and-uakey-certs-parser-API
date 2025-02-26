@@ -30,7 +30,7 @@ class UakeyParser extends BaseParser {
         const rows = await this.driver.findElements(By.css(".overflow.actual .popup-input-result-row"));
         if (rows.length === 0) {
             this.log("No results found.");
-            return;
+            return [];
         }
 
         const certs = await Promise.all(rows.map(async (row) => {
